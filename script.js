@@ -23,26 +23,33 @@ var workingHours = ["9AM","10AM","11AM","12PM","1PM","2PM","3PM","4PM","5PM"];
 
 //Loop over my array of hours and create a div for row, create div for hours, textarea, and a button. Added styling and text context as appropriate
 for (var i = 0; i < workingHours.length; i++){
-    var allHours = $("<div>");
-    allHours.addClass("row time-block");
     var currentHour = $("<div>");
     currentHour.addClass("col-md-2 hour");
     currentHour.text(`\n${workingHours[i]}`);
+
     var currentText = $("<textarea>");
     currentText.addClass("col-md-8 past");
+    if(localStorage.getItem(`savedNote${i}`)){
+        currentText.text(localStorage.getItem(`savedNote${i}`));
+    }
     currentText.attr('id',`hour${i}`);
     currentText.data("time",moment().hours(i+9).minutes(0).seconds(0));
+
     var currentBtn = $("<button>");
     currentBtn.addClass("col-md-2 saveBtn");
     currentBtn.text("Save");
+    currentBtn.attr('id',`${i}`);
     // currentBtn.append($("<span>"));
     // currentBtn.children().addClass("glyphicon glyphicon-floppy-disk")
+
+    var allHours = $("<div>");
+    allHours.addClass("row time-block");
     allHours.append(currentHour,currentText,currentBtn);
     $(".container").append(allHours);
 }
 
 
-// Use moment.js get the current time and compare to the time that is being assigned to the row. Gives the current hour
+// Use moment.js get the current time and compare to the time that is being assigned to the row. Adds classes as appropriate to style the designated hours
 var now = moment().minutes(0);
 for(i = 0; i < 9; i++) {
     var checkWhen = $(`#hour${i}`);
@@ -56,9 +63,13 @@ for(i = 0; i < 9; i++) {
 }
 
 
-//TODO:give the elements the classes that they need eg using an if statement we can check using monet.js to see if the hour that we're looping over is past the current hour if so give the text are the class of past
 
-//TODO: Create click event listener for my buttons
+//TODO: Create click event listener for my save buttons
+$(".saveBtn").on("click", function(event) {
+    var whichRow = event.target.id;
+    var currentTextBox = $(`#hour${whichRow}`)
+    localStorage.setItem(`savedNote${whichRow}`,currentTextBox.val())
+})
 
 //TODO: Grab the value of the text are and save it to a var (I need to be able to save the text from the text area that is in the same row as my button)
 
