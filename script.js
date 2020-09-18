@@ -1,32 +1,17 @@
-
-
-//TODO: Create one row with time, text area, and button using JQ
-//Here's a layout of what we need to make using JQ
-//<div class = "col-md-2 hour">
-//9 AM
-//</div>
-//<textarea class ="col-md-8 past" 
-//</textarea>
-//<button class="col-md-2 saveBtn"
-//Save
-//</button>
-//</div>
-
-
-
-
 //Show the time on top of the calender, using moment.js grab the time 
 $("#currentDay").text(moment().format("dddd MMMM Do"));
 
-//An array to hold the hours
+//An array to hold the hours in proper formating
 var workingHours = ["9AM","10AM","11AM","12PM","1PM","2PM","3PM","4PM","5PM"];
 
-//Loop over my array of hours and create a div for row, create div for hours, textarea, and a button. Added styling and text context as appropriate
+//Loop over my array of hours and create a div for row, create div for hours, textarea, and a button. Added styling and text context as appropriate, including previously saved text
 for (var i = 0; i < workingHours.length; i++){
+    //Displays hour label to the left
     var currentHour = $("<div>");
     currentHour.addClass("col-md-2 hour");
     currentHour.text(`\n${workingHours[i]}`);
 
+    //Displays text box, adds text if previously saved, adds id reference
     var currentText = $("<textarea>");
     currentText.addClass("col-md-8 past");
     if(localStorage.getItem(`savedNote${i}`)){
@@ -35,6 +20,7 @@ for (var i = 0; i < workingHours.length; i++){
     currentText.attr('id',`hour${i}`);
     currentText.data("time",moment().hours(i+9).minutes(0).seconds(0));
 
+    //Displays save box, with id reference. Commented lines represent bootstrap historic functionality that is no longer supported
     var currentBtn = $("<button>");
     currentBtn.addClass("col-md-2 saveBtn");
     currentBtn.text("Save");
@@ -42,6 +28,7 @@ for (var i = 0; i < workingHours.length; i++){
     // currentBtn.append($("<span>"));
     // currentBtn.children().addClass("glyphicon glyphicon-floppy-disk")
 
+    //Combines the above displays into one row and adds it to the page
     var allHours = $("<div>");
     allHours.addClass("row time-block");
     allHours.append(currentHour,currentText,currentBtn);
@@ -64,22 +51,9 @@ for(i = 0; i < 9; i++) {
 
 
 
-//TODO: Create click event listener for my save buttons
+//Create click event listener for my save buttons, that captures saved text for future use.
 $(".saveBtn").on("click", function(event) {
     var whichRow = event.target.id;
     var currentTextBox = $(`#hour${whichRow}`)
     localStorage.setItem(`savedNote${whichRow}`,currentTextBox.val())
 })
-
-//TODO: Grab the value of the text are and save it to a var (I need to be able to save the text from the text area that is in the same row as my button)
-
-//TODO: using localStorage.setItem save the text to local storage
-
-//TODO:retrieve the data from local storage using localStorage.getItem and show them back on the text area that they belong  to (How can I know what text from local storage goes to what text are?)
-
-//localStorage.setItem("test","My first note")
-//localStorage.setItem("test1", "My second note")
-//var text1FromLocalStorage = localStorage.getItem("test")
-//$(".first").text(text1FromLocalStorage)
-//var text2FromLocalStorage = localStorage.getItem(test1)
-//$(".second").text(text2FromLocalStorage)
